@@ -48,6 +48,7 @@ try:
     result = car_positions_collection.insert_one(sampleData.getData())
     print(f"Inserted document with id: {result.inserted_id}")
 except Exception as e:
+    
     print(f"An error occurred: {e}")
 app = Flask(__name__)
 
