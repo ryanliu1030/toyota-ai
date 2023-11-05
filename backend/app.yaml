@@ -1,0 +1,4 @@
+runtime: python38
+vpc_access_connector:
+  name: "projects/toyota-ai/locations/us-central1/connectors/default"
+  egress_setting: all-traffic

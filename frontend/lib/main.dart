@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:toyota_ai/record.dart';
 import 'pages/new_page.dart';
 
 void main() {
@@ -28,29 +27,29 @@ class MyApp extends StatelessWidget {
             body: Center(
               child: Row(
                 children: [
-                  Transform.rotate(
-                      angle: 90 * 3.1415926535 / 180,
-                      child: Container(
-                        width: 100,
-                        height: 150,
-                        child: RecordWidget(),
-                      )
-                  ),
                   // Transform.rotate(
-                  //   angle: 90 * 3.1415926535 / 180,
-                  //   child: ElevatedButton.icon(
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Colors.black12,
-                  //       foregroundColor: Colors.white,
-                  //       fixedSize: const Size(120,50),
-                  //     ),
-                  //     onPressed: (){
-                  //       // Handle Button press
-                  //     },
-                  //     icon: Icon(Icons.mic),
-                  //     label: Text("Record"),
-                  //   ),
+                  //     angle: 90 * 3.1415926535 / 180,
+                  //     child: Container(
+                  //       width: 100,
+                  //       height: 150,
+                  //       child: Null,
+                  //     )
                   // ),
+                  Transform.rotate(
+                    angle: 90 * 3.1415926535 / 180,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black12,
+                        foregroundColor: Colors.white,
+                        fixedSize: const Size(120,50),
+                      ),
+                      onPressed: (){
+                        // Handle Button press
+                      },
+                      icon: Icon(Icons.mic),
+                      label: Text("Record"),
+                    ),
+                  ),
                   Stack(
                     children: [
                       Transform.rotate(
