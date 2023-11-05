@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:toyota_ai/main.dart';
+import 'package:toyota_ai/toyotaMaps.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

@@ -1,11 +1,15 @@
 
 import 'dart:async';
-
+import 'package:flutter/services.dart' show ByteData, DeviceOrientation, SystemChrome, SystemUiMode, SystemUiOverlay, Uint8List, rootBundle;
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+
+
+
 
 import 'package:toyota_ai/pages/permission_service.dart';
+import 'dart:ui' as ui;
 
 
 void main() {
@@ -64,31 +68,77 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  String _mapStyle = "";
+  late GoogleMapController mapController;
+
+
+
   //Get permissions on app initialization
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
+
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [],
+    );
+    rootBundle.loadString('assets/mapStyle.txt').then((string) {
+      _mapStyle = string;
+    });
     permissionRequester();
+
   }
+
+  final LatLng _center = const LatLng(32.98585936294416, -96.75026886083008);
+
+
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    mapController.setMapStyle(_mapStyle);
+  }
+
+  // declared method to get Images
+  Future<Uint8List> getImage(String path, int width) async{
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetHeight: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return(await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+
+  }
+
 
 
 
   //Build app
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-        initialCenter: LatLng(51.509364, -0.128928),
-        initialZoom: 9.2,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://stamen-tiles.a.ssl.fastly.net/toner-background/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
-        ),
 
-      ],
-    );
+
+
+
+    //map
+    return MaterialApp(
+      home: Scaffold(
+        body: GoogleMap(
+          markers: {
+            Marker(markerId: MarkerId("car"),
+              position: _center,
+              infoWindow: InfoWindow(
+                title: "You are here"
+              )
+            )
+          },
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 17.0,
+          ),
+        ),
+    )
+      );
   }
 
 
