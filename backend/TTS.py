@@ -1,11 +1,11 @@
 from google.cloud import texttospeech
 from google.cloud import storage
 import os
-
+import uuid
 # Initialize Google Cloud Storage client
 
 def make_sound(text: str):
-    storage_client = storage.Client()
+    storage_client = storage.Client(project="toyota-ai")
 
     bucket_name = 'toyota-ai'
     bucket = storage_client.bucket(bucket_name)
@@ -31,12 +31,12 @@ def make_sound(text: str):
     response = client.synthesize_speech(
         input=synthesis_input, voice=voice, audio_config=audio_config
     )
-    filename = "output.mp3"
+    filename = str(uuid.uuid4())+".mp3"
     # The response's audio_content is binary.
     with open(filename, "wb") as out:
         # Write the response to the output file.
         out.write(response.audio_content)
-        print('Audio content written to file "output.mp3"')
+        print("Audio content written to file " + filename)
     blob = bucket.blob(filename)
     blob.upload_from_filename(filename)
 
