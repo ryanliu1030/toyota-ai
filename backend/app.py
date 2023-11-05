@@ -3,10 +3,13 @@ import google.generativeai as palm
 import random
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from TTS import make_sound
+from STT import transcribe_file
 API_KEY = 'AIzaSyDmZnz_tzgyL6GotLqDdSsKYWymhn0c1v4'
 
 palm.configure(api_key=API_KEY)
 uri = "mongodb+srv://admin:0oaDZ3moDIHYHQbK@cluster0.cquhhbc.mongodb.net/?retryWrites=true&w=majority"
+
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))    
 try:
@@ -20,10 +23,11 @@ app = Flask(__name__)
 #listen from user and send back reply using Bard AI
 @app.route('/listen', methods=['GET'])
 def listen():
-    #print(request.json["messages"])
-    #return "Bye world"
-    reply = palm.chat(context="Speak like a toyota assistant", messages = request.json["messages"])
-    return jsonify(reply.last)
+    #print( transcribe_file("./static/Recording.mp3"))
+    reply = palm.chat(context="Speak like a toyota assistant", messages = transcribe_file("./static/weather.mp3"))
+    response = make_sound(reply.last)
+    return jsonify(response)
+
 
 @app.route('/')
 def index():
